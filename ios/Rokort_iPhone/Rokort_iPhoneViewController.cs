@@ -137,7 +137,7 @@ namespace Rokort_iPhone
 					new KeyValuePair<string, string> ("route", route),
 					new KeyValuePair<string, string> ("Description", Description),
 					new KeyValuePair<string, string> ("StartDateTime", formatApiDate(StartDateTime)),
-					new KeyValuePair<string, string> ("EndDateTime", formatApiDate(EndDateTime),
+					new KeyValuePair<string, string> ("EndDateTime", formatApiDate(EndDateTime)),
 					new KeyValuePair<string, string> ("Distance", Distance),
 					new KeyValuePair<string, string> ("rower_list", Rower_list),
 					new KeyValuePair<string, string> ("member_list", Member_list),
