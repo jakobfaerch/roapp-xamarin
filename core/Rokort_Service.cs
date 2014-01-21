@@ -29,7 +29,7 @@ namespace Rokort_iPhone
 			var handler = new HttpClientHandler {
 				UseCookies = false,
 				UseDefaultCredentials = false,
-				Proxy = new WebProxy ("http://192.168.1.122:8888", false, new string[] {}),
+				Proxy = new WebProxy ("http://192.168.1.113:8888", false, new string[] {}),
 				UseProxy = true,
 			};
 			HttpClient hc = new HttpClient (handler);
@@ -138,7 +138,7 @@ namespace Rokort_iPhone
 			}
 		}
 
-		public async Task stopTrip ()
+		public async Task stopTrip (int distance)
 		{
 			String sessionCookie = await login(hc);
 
@@ -150,7 +150,7 @@ namespace Rokort_iPhone
 				xEnd = null,
 				StartDateTime = tripStartTime,
 				EndDateTime = DateTime.Now,
-				Distance = "5",
+				Distance = distance+"",
 				Completed = "1",
 			}.build (sessionCookie);
 

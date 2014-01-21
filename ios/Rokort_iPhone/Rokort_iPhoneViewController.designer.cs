@@ -1,23 +1,34 @@
 // WARNING
 //
-// This file has been generated automatically by MonoDevelop to store outlets and
-// actions made in the Xcode designer. If it is removed, they will be lost.
+// This file has been generated automatically by Xamarin Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
 using MonoTouch.Foundation;
+using System.CodeDom.Compiler;
 
 namespace Rokort_iPhone
 {
-    [Register ("Rokort_iPhoneViewController")]
+	[Register ("Rokort_iPhoneViewController")]
 	partial class Rokort_iPhoneViewController
 	{
 		[Outlet]
 		MonoTouch.UIKit.UIButton btnClickMe { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UILabel lblOutput { get; set; }
+		MonoTouch.UIKit.UIPickerView pickerView { get; set; }
+		
+		void ReleaseDesignerOutlets ()
+		{
+			if (btnClickMe != null) {
+				btnClickMe.Dispose ();
+				btnClickMe = null;
+			}
 
-		[Action ("actnButtonClick:")]
-		partial void actnButtonClick (MonoTouch.Foundation.NSObject sender);
+			if (pickerView != null) {
+				pickerView.Dispose ();
+				pickerView = null;
+			}
+		}
 	}
 }

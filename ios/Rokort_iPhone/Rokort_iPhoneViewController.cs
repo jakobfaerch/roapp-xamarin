@@ -26,7 +26,9 @@ namespace Rokort_iPhone
 		{
 			base.ViewDidLoad ();
 
-			//any additional setup after loading the view, typically from a nib.
+			Console.WriteLine (this.pickerView);
+			this.pickerView.Model = new MileageDataSource ();
+			this.pickerView.Hidden = true;
 
 			rokortService = new Rokort_Service ();
 
@@ -34,14 +36,16 @@ namespace Rokort_iPhone
 			this.btnClickMe.TouchUpInside += async (sender, e) => {
 				this.btnClickMe.Enabled = false;
 				if (isTripStarted) {
-					await rokortService.stopTrip();
+					await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0));
 					this.btnClickMe.SetTitle("Start tur", UIControlState.Normal);
 					this.btnClickMe.Enabled = true;
+					this.pickerView.Hidden = true;
 					isTripStarted = false;
 				} else {
 					await rokortService.startTrip ();
 					this.btnClickMe.SetTitle("Stop tur", UIControlState.Normal);
 					this.btnClickMe.Enabled = true;
+					this.pickerView.Hidden = false;
 					isTripStarted = true;
 				}
 			};
