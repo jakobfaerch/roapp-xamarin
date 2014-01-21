@@ -1,0 +1,13 @@
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/MonoAndroid,Version=v2.2.AssemblyAttribute.cs
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/bin/Debug/Rokort_Android.dll.mdb
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/bin/Debug/Rokort_Android.dll
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/bin/Debug/Rokort_Android.Rokort_Android.apk
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/android/bin/Rokort_Android.Rokort_Android.apk
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/res/layout/main.xml
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/res/values/strings.xml
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/res/drawable/icon.png
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/R.cs.flag
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/bin/Debug/Rokort_Android.Rokort_Android-Signed.apk
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/uploadflags.txt
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/Rokort_Android.dll
+/Users/skr/swdev/other/x_roapp_git/android/Rokort_Android/Rokort_Android/obj/Debug/Rokort_Android.dll.mdb
