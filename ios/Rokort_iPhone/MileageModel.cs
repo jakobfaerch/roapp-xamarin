@@ -3,9 +3,9 @@ using MonoTouch.UIKit;
 
 namespace Rokort_iPhone
 {
-	public class MileageDataSource: UIPickerViewModel
+	public class MileageModel: UIPickerViewModel
     {
-        public MileageDataSource ()
+        public MileageModel ()
         {
         }
 
