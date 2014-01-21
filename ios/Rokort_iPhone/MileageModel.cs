@@ -9,8 +9,6 @@ namespace Rokort_iPhone
         {
         }
 
-		#region implemented abstract members of UIPickerViewDataSource
-
 		public override int GetComponentCount (UIPickerView pickerView)
 		{
 			return 1;
@@ -21,11 +19,13 @@ namespace Rokort_iPhone
 			return 20;
 		}
 
-		#endregion
-
-		public override string GetTitle(UIPickerView view, int row, int component)
+		public override UIView GetView (UIPickerView picker, int row, int component, UIView view)
 		{
-			return ""+row;
+			var label = new UILabel ();
+			label.Text = "" + row;
+			label.TextColor = UIColor.White;
+			label.TextAlignment = UITextAlignment.Center;
+			return label;
 		}
     }
 }

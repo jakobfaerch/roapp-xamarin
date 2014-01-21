@@ -27,8 +27,9 @@ namespace Rokort_iPhone
 		{
 			base.ViewDidLoad ();
 
+			this.btnClickMe.SetTitle ("...", UIControlState.Disabled);
 			this.btnClickMe.Enabled = false;
-			updateUi();
+			this.pickerView.Hidden = true;
 
 			this.pickerView.Model = new MileageModel ();
 
