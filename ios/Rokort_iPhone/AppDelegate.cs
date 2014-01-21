@@ -4,7 +4,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace HelloWorld_iPhone
+namespace Rokort_iPhone
 {
 	/// <summary>
 	/// The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -15,7 +15,7 @@ namespace HelloWorld_iPhone
 	public partial class AppDelegate : UIApplicationDelegate
 	{
 		UIWindow window;
-		HelloWorld_iPhoneViewController viewController;
+		Rokort_iPhoneViewController viewController;
 		
 		/// <summary>
 		/// This method is invoked when the application has loaded and is ready to run. In this 
@@ -31,7 +31,7 @@ namespace HelloWorld_iPhone
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			
 			
-			viewController = new HelloWorld_iPhoneViewController ("HelloWorld_iPhoneViewController", null);
+			viewController = new Rokort_iPhoneViewController ("Rokort_iPhoneViewController", null);
 			window.RootViewController = viewController;
 			window.MakeKeyAndVisible ();
 			

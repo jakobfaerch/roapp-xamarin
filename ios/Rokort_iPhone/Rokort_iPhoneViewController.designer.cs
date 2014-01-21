@@ -6,10 +6,10 @@
 //
 using MonoTouch.Foundation;
 
-namespace HelloWorld_iPhone
+namespace Rokort_iPhone
 {
-	[Register ("HelloWorld_iPhoneViewController")]
-	partial class HelloWorld_iPhoneViewController
+    [Register ("Rokort_iPhoneViewController")]
+	partial class Rokort_iPhoneViewController
 	{
 		[Outlet]
 		MonoTouch.UIKit.UIButton btnClickMe { get; set; }

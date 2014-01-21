@@ -4,7 +4,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace HelloWorld_iPhone
+namespace Rokort_iPhone
 {
 	public class Application
 	{

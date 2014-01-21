@@ -3,16 +3,16 @@ using System.Drawing;
 using System;
 using MonoTouch.Foundation;
 
-namespace HelloWorld_iPhone
+namespace Rokort_iPhone
 {
-	public partial class HelloWorld_iPhoneViewController : UIViewController
+	public partial class Rokort_iPhoneViewController : UIViewController
 	{
 		/// <summary>
 		/// a class-level variable that tracks the number of times the button has been clicked.
 		/// </summary>
 		protected int _numberOfTimesClicked = 0;
 		
-		public HelloWorld_iPhoneViewController (string nibName, NSBundle bundle) : base (nibName, bundle)
+		public Rokort_iPhoneViewController (string nibName, NSBundle bundle) : base (nibName, bundle)
 		{
 		}
 		
