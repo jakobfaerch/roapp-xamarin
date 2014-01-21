@@ -1,1 +1,0 @@
-Rokort_Android.MainActivity;rokort_android.MainActivity
