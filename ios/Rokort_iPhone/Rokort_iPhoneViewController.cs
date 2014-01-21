@@ -1,6 +1,7 @@
 using MonoTouch.UIKit;
 using System.Drawing;
 using System;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +14,9 @@ namespace Rokort_iPhone
 {
 	public partial class Rokort_iPhoneViewController : UIViewController
 	{
+		private Boolean isTripStarted = true;
 		private const String rowerId = "1541";
+		HttpClient hc;
 
 		public Rokort_iPhoneViewController (string nibName, NSBundle bundle) : base (nibName, bundle)
 		{
@@ -30,34 +33,38 @@ namespace Rokort_iPhone
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			
+
 			//any additional setup after loading the view, typically from a nib.
-			
+
+			hc = makeHttpClient ();
+
 			//---- wire up our click me button
 			this.btnClickMe.TouchUpInside += (sender, e) => {
-				startTrip ();
+				if (isTripStarted) {
+					stopTrip();
+					this.btnClickMe.SetTitle("Start tur", UIControlState.Normal);
+				} else {
+					startTrip ();
+					this.btnClickMe.SetTitle("Stop tur", UIControlState.Normal);
+				}
 			};
 
 		}
 
-		static CookieContainer cookies = new CookieContainer();
-
-		static HttpClient makeHttpClient ()
+		HttpClient makeHttpClient ()
 		{
 			var handler = new HttpClientHandler {
 				UseCookies = false,
 				UseDefaultCredentials = false,
-				Proxy = new WebProxy ("http://192.168.1.113:8888", false, new string[] {}),
+				Proxy = new WebProxy ("http://10.0.1.5:8888", false, new string[] {}),
 				UseProxy = true,
 			};
 			HttpClient hc = new HttpClient (handler);
 			return hc;
 		}
 
-		static async void startTrip()
+		async void startTrip()
 		{
-			var hc = makeHttpClient ();
-
 			String sessionCookie = await login(hc);
 
 			HttpContent content = new FormUrlEncodedContent(
@@ -89,7 +96,14 @@ namespace Rokort_iPhone
 			Console.WriteLine ("Turen er startet");
 		}
 
-		static async Task<String> login (HttpClient hc)
+		async void stopTrip ()
+		{
+			String sessionCookie = await login(hc);
+
+			fetchTripID (sessionCookie);
+		}
+
+		async Task<String> login (HttpClient hc)
 		{
 			Task<HttpResponseMessage> getCookieTask = hc.GetAsync ("http://www.rokort.dk/workshop/index.php?siteid=4&guid=61BED0F9-CD54-4605-AD95-76785A6678D7");
 			HttpResponseMessage cookieResponse = await getCookieTask;
@@ -111,6 +125,20 @@ namespace Rokort_iPhone
 		{
 			// Return true for supported orientations
 			return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
+		}
+
+		async void fetchTripID (string sessionCookie)
+		{
+			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "http://www.rokort.dk/workshop/workshop2.php");
+			message.Headers.Add("Cookie", sessionCookie);
+
+			HttpResponseMessage response = await hc.SendAsync (message);
+			String responseBody = await response.Content.ReadAsStringAsync ();
+
+			Match match = Regex.Match (responseBody, "<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + rowerId + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>");
+			var tripId = match.Groups [1];
+			Console.WriteLine ("Succes " + match.Success + "Group[1] " + tripId);
+			return tripId;
 		}
 	}
 }
