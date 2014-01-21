@@ -126,7 +126,7 @@ namespace Rokort_iPhone
 				var formValues = new List<KeyValuePair<string, string>> {
 					new KeyValuePair<string, string> ("ID", ID),
 					new KeyValuePair<string, string> ("xStartDateTime", formatApiDate(xStart)),
-					new KeyValuePair<string, string> ("xEndDateTime", xEnd.Value.ToString(apiDateFormat)),
+					new KeyValuePair<string, string> ("xEndDateTime", formatApiDate(xEnd)),
 					new KeyValuePair<string, string> ("CheckPermissions", CheckPermission),
 					new KeyValuePair<string, string> ("CheckDamages", CheckDamages),
 					new KeyValuePair<string, string> ("CheckBoatOrder", CheckBoatOrder),
@@ -136,8 +136,8 @@ namespace Rokort_iPhone
 					new KeyValuePair<string, string> ("guest", guest),
 					new KeyValuePair<string, string> ("route", route),
 					new KeyValuePair<string, string> ("Description", Description),
-					new KeyValuePair<string, string> ("StartDateTime", StartDateTime.Value.ToString(apiDateFormat)),
-					new KeyValuePair<string, string> ("EndDateTime", EndDateTime.Value.ToString(apiDateFormat)),
+					new KeyValuePair<string, string> ("StartDateTime", formatApiDate(StartDateTime)),
+					new KeyValuePair<string, string> ("EndDateTime", formatApiDate(EndDateTime),
 					new KeyValuePair<string, string> ("Distance", Distance),
 					new KeyValuePair<string, string> ("rower_list", Rower_list),
 					new KeyValuePair<string, string> ("member_list", Member_list),
@@ -154,7 +154,11 @@ namespace Rokort_iPhone
 
 			private String formatApiDate(Nullable<DateTime> value) 
 			{
-				return "foo";
+				if (value.HasValue) {
+					value.Value.ToString (apiDateFormat);
+				} else {
+					return "0";
+				};
 			}
 		}
 
