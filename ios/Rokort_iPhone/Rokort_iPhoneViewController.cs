@@ -14,6 +14,7 @@ namespace Rokort_iPhone
 {
 	public partial class Rokort_iPhoneViewController : UIViewController
 	{
+		DateTime tripStartTime;
 		private Boolean isTripStarted = false;
 		private const string RowerId = "1541";
 		private const string apiDateFormat = "yyyy-MM-dd hh:mm:ss";
@@ -41,12 +42,11 @@ namespace Rokort_iPhone
 
 			//---- wire up our click me button
 			this.btnClickMe.TouchUpInside += (sender, e) => {
+				this.btnClickMe.Enabled = false;
 				if (isTripStarted) {
 					stopTrip();
-					this.btnClickMe.SetTitle("Start tur", UIControlState.Normal);
 				} else {
 					startTrip ();
-					this.btnClickMe.SetTitle("Stop tur", UIControlState.Normal);
 				}
 			};
 
@@ -57,7 +57,7 @@ namespace Rokort_iPhone
 			var handler = new HttpClientHandler {
 				UseCookies = false,
 				UseDefaultCredentials = false,
-				Proxy = new WebProxy ("http://192.168.1.113:8888", false, new string[] {}),
+				Proxy = new WebProxy ("http://192.168.1.122:8888", false, new string[] {}),
 				UseProxy = true,
 			};
 			HttpClient hc = new HttpClient (handler);
@@ -68,14 +68,17 @@ namespace Rokort_iPhone
 		{
 			String sessionCookie = await login(hc);
 
-			var content = new ContentForRequest().build();
+			tripStartTime = DateTime.Now;
 
-			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-			content.Headers.Add ("DNT", "1");
-			content.Headers.Add ("Cookie", sessionCookie);
+			var content = new ContentForRequest () {
+				StartDateTime = tripStartTime
+			}.build (sessionCookie);
 
 			var response = await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);
 
+			this.btnClickMe.SetTitle("Stop tur", UIControlState.Normal);
+			this.btnClickMe.Enabled = true;
+			isTripStarted = true;
 			Console.WriteLine ("Turen er startet, http status " + response.StatusCode);
 		}
 
@@ -121,7 +124,7 @@ namespace Rokort_iPhone
 			public string Member_list { get; set; }
 			public String Completed { get; set; }
 
-			public HttpContent build()
+			public HttpContent build(String sessionCookie)
 			{
 				var formValues = new List<KeyValuePair<string, string>> {
 					new KeyValuePair<string, string> ("ID", ID),
@@ -149,6 +152,10 @@ namespace Rokort_iPhone
 
 				HttpContent content = new FormUrlEncodedContent (formValues);
 
+				content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+				content.Headers.Add ("DNT", "1");
+				content.Headers.Add ("Cookie", sessionCookie);
+
 				return content;
 			}
 
@@ -162,13 +169,27 @@ namespace Rokort_iPhone
 			}
 		}
 
-
-
 		async void stopTrip ()
 		{
 			String sessionCookie = await login(hc);
 
-			fetchTripID (sessionCookie);
+			String tripId = await fetchTripID (sessionCookie);
+
+			var content = new ContentForRequest {
+				ID = tripId,
+				xStart = tripStartTime,
+				xEnd = null,
+				StartDateTime = tripStartTime,
+				EndDateTime = DateTime.Now,
+				Distance = "5",
+				Completed = "1",
+			}.build (sessionCookie);
+
+			var response = await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);
+
+			this.btnClickMe.SetTitle("Start tur", UIControlState.Normal);
+			this.btnClickMe.Enabled = true;
+			Console.WriteLine ("Turen er stoppet, http status " + response.StatusCode);
 		}
 
 		async Task<String> login (HttpClient hc)
@@ -179,12 +200,6 @@ namespace Rokort_iPhone
 			var cookieHeaderValue = cookieResponse.Headers.GetValues ("Set-Cookie").First ().Split(';')[0];
 			Console.WriteLine (cookieHeaderValue);
 			return cookieHeaderValue;
-		}
-		
-		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
-		{
-			// Return true for supported orientations
-			return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
 		}
 
 		async Task<String> fetchTripID (string sessionCookie)
