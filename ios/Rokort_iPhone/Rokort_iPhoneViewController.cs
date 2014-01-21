@@ -57,7 +57,7 @@ namespace Rokort_iPhone
 				UseCookies = false,
 				UseDefaultCredentials = false,
 				Proxy = new WebProxy ("http://10.0.1.5:8888", false, new string[] {}),
-				UseProxy = true,
+				UseProxy = false,
 			};
 			HttpClient hc = new HttpClient (handler);
 			return hc;
@@ -119,7 +119,7 @@ namespace Rokort_iPhone
 			return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
 		}
 
-		async void fetchTripID (string sessionCookie)
+		async Task<String> fetchTripID (string sessionCookie)
 		{
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "http://www.rokort.dk/workshop/workshop2.php");
 			message.Headers.Add("Cookie", sessionCookie);
@@ -130,7 +130,7 @@ namespace Rokort_iPhone
 			Match match = Regex.Match (responseBody, "<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + rowerId + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>");
 			var tripId = match.Groups [1];
 			Console.WriteLine ("Succes " + match.Success + "Group[1] " + tripId);
-			return tripId;
+			return tripId.Value;
 		}
 	}
 }
