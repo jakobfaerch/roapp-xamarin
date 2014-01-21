@@ -16,7 +16,7 @@ namespace Rokort_iPhone
 	{
 		DateTime tripStartTime;
 		private const string RowerId = "1541";
-		private const string apiDateFormat = "yyyy-MM-dd hh:mm:ss";
+		private const string apiDateFormat = "yyyy-MM-dd HH:mm:ss";
 		HttpClient hc;
 
 		public Rokort_Service ()
