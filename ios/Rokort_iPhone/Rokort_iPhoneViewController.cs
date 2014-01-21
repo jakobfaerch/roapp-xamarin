@@ -45,7 +45,7 @@ namespace Rokort_iPhone
 			var handler = new HttpClientHandler {
 				UseCookies = false,
 				UseDefaultCredentials = false,
-				Proxy = new WebProxy ("http://10.0.1.6:8888", false, new string[] {}),
+				Proxy = new WebProxy ("http://192.168.1.113:8888", false, new string[] {}),
 				UseProxy = true,
 			};
 			HttpClient hc = new HttpClient (handler);
@@ -60,9 +60,28 @@ namespace Rokort_iPhone
 
 			HttpContent content = new FormUrlEncodedContent(
 				new List<KeyValuePair<string, string>> { 
-					new KeyValuePair<string, string>("key1", "value1")
+					new KeyValuePair<string, string>("xStartDateTime", "0"),
+					new KeyValuePair<string, string>("xEndDateTime", "0"),
+					new KeyValuePair<string, string>("CheckPermissions", "1"),
+					new KeyValuePair<string, string>("CheckDamages", "1"),
+					new KeyValuePair<string, string>("CheckBoatOrder", "1"),
+					new KeyValuePair<string, string>("CheckReservations", "1"),
+					new KeyValuePair<string, string>("action", "update"),
+					new KeyValuePair<string, string>("BoatID", "090"),
+					new KeyValuePair<string, string>("guest", ""),
+					new KeyValuePair<string, string>("route", "1"),
+					new KeyValuePair<string, string>("Description", "Brabrand Sø"),
+					new KeyValuePair<string, string>("StartDateTime", "21-01-2014 15:14"),
+					new KeyValuePair<string, string>("EndDateTime", ""),
+					new KeyValuePair<string, string>("Distance", ""),
+					new KeyValuePair<string, string>("rower_list", "~1541"),
+					new KeyValuePair<string, string>("member_list", "~A#~1006#~95#~1023#~89#~528#~137#~548#~447#~515#~330#~43#~34#~506#~243#~22#~386#~494#~77#~502#~498#~B#~144#~328#~390#~513#~393#~1002#~99#~412#~138#~360#~313#~91#~1022#~1031#~C#~175#~38#~422#~485#~446#~421#~15#~331#~120#~539#~391#~1550#~1540#~D#~188#~265#~404#~381#~152#~529#~116#~E#~28#~349#~1557#~511#~311#~210#~202#~172#~457#~69#~535#~107#~434#~406#~140#~F#~174#~426#~30#~3#~4#~G#~80#~113#~500#~9#~H#~196#~45#~473#~497#~12#~63#~222#~145#~129#~206#~546#~78#~474#~61#~20#~26#~I#~1539#~459#~427#~466#~450#~319#~477#~411#~52#~J#~432#~490#~1001#~146#~255#~92#~468#~443#~407#~514#~517#~114#~148#~491#~399#~352#~220#~463#~332#~186#~516#~284#~405#~32#~121#~540#~82#~K#~241#~155#~533#~208#~305#~508#~346#~388#~132#~L#~166#~501#~471#~436#~1#~1556#~211#~350#~442#~441#~430#~66#~542#~428#~273#~1003#~504#~103#~1012#~512#~42#~488#~351#~544#~532#~256#~2000#~M#~21#~518#~537#~482#~59#~354#~94#~538#~505#~479#~543#~503#~536#~415#~509#~176#~214#~254#~438#~224#~178#~205#~N#~445#~1029#~36#~76#~444#~359#~163#~338#~149#~180#~O#~14#~17#~1559#~522#~106#~18#~P#~85#~246#~253#~62#~519#~1028#~343#~8#~209#~193#~425#~368#~98#~207#~1027#~402#~401#~355#~1019#~1013#~R#~160#~312#~295#~531#~493#~521#~54#~304#~S#~84#~495#~541#~1538#~1440#~1005#~383#~520#~270#~547#~440#~86#~403#~10#~437#~7#~530#~1435#~499#~496#~T#~389#~117#~277#~1018#~1600#~534#~257#~492#~348#~345#~1021#~1542#~1015#~19#~V#~545#~307#~W#~414#~1300#~~"),
 				});
+
+			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+			content.Headers.Add ("DNT", "1");
 			content.Headers.Add ("Cookie", sessionCookie);
+
 			await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);
 
 			Console.WriteLine ("Turen er startet");
