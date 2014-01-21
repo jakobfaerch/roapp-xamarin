@@ -155,7 +155,7 @@ namespace Rokort_iPhone
 			private String formatApiDate(Nullable<DateTime> value) 
 			{
 				if (value.HasValue) {
-					value.Value.ToString (apiDateFormat);
+					return value.Value.ToString (apiDateFormat);
 				} else {
 					return "0";
 				};
