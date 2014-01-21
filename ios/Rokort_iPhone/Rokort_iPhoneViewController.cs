@@ -37,19 +37,22 @@ namespace Rokort_iPhone
 				this.btnClickMe.Enabled = false;
 				if (isTripStarted) {
 					await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0));
-					this.btnClickMe.SetTitle("Start tur", UIControlState.Normal);
-					this.btnClickMe.Enabled = true;
-					this.pickerView.Hidden = true;
 					isTripStarted = false;
 				} else {
 					await rokortService.startTrip ();
-					this.btnClickMe.SetTitle("Stop tur", UIControlState.Normal);
-					this.btnClickMe.Enabled = true;
-					this.pickerView.Hidden = false;
 					isTripStarted = true;
 				}
+				updateUi();
 			};
 
+		}
+
+		void updateUi ()
+		{
+			var buttonTitle = isTripStarted ? "Stop tur" : "Start tur";
+			this.btnClickMe.SetTitle (buttonTitle, UIControlState.Normal);
+			this.btnClickMe.Enabled = true;
+			this.pickerView.Hidden = !isTripStarted;
 		}
 	}
 }
