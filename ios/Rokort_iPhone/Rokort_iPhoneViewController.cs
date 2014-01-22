@@ -54,7 +54,7 @@ namespace Rokort_iPhone
 					await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0));
 					isTripStarted = false;
 				} else {
-					await rokortService.startTrip ();
+                    await rokortService.startTrip (rowerModel.getRowerId(rowerPicker), boatModel.GetBoatId(boatPicker));
 					isTripStarted = true;
 				}
 				updateUi();

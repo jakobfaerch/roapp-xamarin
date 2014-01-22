@@ -43,8 +43,8 @@ namespace Rokort_iPhone
 			ongoingTrip = new TripInfo{ startTime = DateTime.Now };
 
 			var content = new ContentForRequest {
-				Rower_list = rowerId;
-				boatId = boatId;
+                Rower_list = rowerId,
+                BoatID = boatId,
 			}.build (sessionCookie);
 
 			var response = await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);
