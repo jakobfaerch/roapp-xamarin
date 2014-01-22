@@ -11,6 +11,10 @@ namespace Rokort_iPhone
 		private Boolean isTripStarted = false;
 		Rokort_Service rokortService;
 
+		BoatModel boatModel;
+
+		RowerModel rowerModel;
+
 		public Rokort_iPhoneViewController (string nibName, NSBundle bundle) : base (nibName, bundle)
 		{
 		}
@@ -32,6 +36,10 @@ namespace Rokort_iPhone
 			this.pickerView.Hidden = true;
 
 			this.pickerView.Model = new MileageModel ();
+			rowerModel = new RowerModel ();
+			this.rowerPicker.Model = rowerModel;
+			boatModel = new BoatModel ();
+			this.boatPicker.Model = boatModel;
 
 			rokortService = new Rokort_Service ();
 
@@ -59,6 +67,8 @@ namespace Rokort_iPhone
 			this.btnClickMe.SetTitle (buttonTitle, UIControlState.Normal);
 			this.btnClickMe.Enabled = true;
 			this.pickerView.Hidden = !isTripStarted;
+			this.boatPicker.Hidden = isTripStarted;
+			this.rowerPicker.Hidden = isTripStarted;
 		}
 	}
 }

@@ -74,6 +74,8 @@
       <Link>core\Rokort_Service.cs</Link>
     </Compile>
     <Compile Include="MileageModel.cs" />
+    <Compile Include="RowerModel.cs" />
+    <Compile Include="BoatModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

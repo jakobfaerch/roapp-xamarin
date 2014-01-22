@@ -13,10 +13,16 @@ namespace Rokort_iPhone
 	partial class Rokort_iPhoneViewController
 	{
 		[Outlet]
+		MonoTouch.UIKit.UIPickerView boatPicker { get; set; }
+
+		[Outlet]
 		MonoTouch.UIKit.UIButton btnClickMe { get; set; }
 
 		[Outlet]
 		MonoTouch.UIKit.UIPickerView pickerView { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UIPickerView rowerPicker { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -28,6 +34,16 @@ namespace Rokort_iPhone
 			if (pickerView != null) {
 				pickerView.Dispose ();
 				pickerView = null;
+			}
+
+			if (rowerPicker != null) {
+				rowerPicker.Dispose ();
+				rowerPicker = null;
+			}
+
+			if (boatPicker != null) {
+				boatPicker.Dispose ();
+				boatPicker = null;
 			}
 		}
 	}
