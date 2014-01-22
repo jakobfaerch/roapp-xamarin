@@ -6,15 +6,16 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Rokort_iPhone
 {
 	public class Rokort_Service
 	{
-		DateTime tripStartTime;
 		private const string RowerId = "1541";
 		private const string apiDateFormat = "yyyy-MM-dd HH:mm:ss";
 		HttpClient hc;
+		static TripInfo ongoingTrip = null;
 
 		public Rokort_Service ()
 		{
@@ -26,7 +27,7 @@ namespace Rokort_iPhone
 			var handler = new HttpClientHandler {
 				UseCookies = false,
 				UseDefaultCredentials = false,
-				Proxy = new WebProxy ("http://192.168.1.113:8888", false, new string[] {}),
+				Proxy = new WebProxy ("http://192.168.1.116:8888", false, new string[] {}),
 				UseProxy = false,
 			};
 			HttpClient hc = new HttpClient (handler);
@@ -37,11 +38,9 @@ namespace Rokort_iPhone
 		{
 			String sessionCookie = await login(hc);
 
-			tripStartTime = DateTime.Now;
+			ongoingTrip = new TripInfo{ startTime = DateTime.Now };
 
-			var content = new ContentForRequest () {
-				StartDateTime = tripStartTime
-			}.build (sessionCookie);
+			var content = new ContentForRequest().build (sessionCookie);
 
 			var response = await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);
 
@@ -63,7 +62,11 @@ namespace Rokort_iPhone
 				guest = "";
 				route = "1";
 				Description = "Brabrand Sø";
-				StartDateTime = null;
+				if (ongoingTrip != null) {
+					StartDateTime = ongoingTrip.startTime;
+				} else {
+					StartDateTime = null;
+				}
 				EndDateTime = null;
 				Distance = "";
 				Rower_list = "~" + RowerId;
@@ -72,8 +75,8 @@ namespace Rokort_iPhone
 			}
 
 			public string ID { get; set; }
-			public Nullable<DateTime> xStart { get; set; }
-			public Nullable<DateTime> xEnd { get; set; }
+			public DateTime? xStart { get; set; }
+			public DateTime? xEnd { get; set; }
 			public string CheckPermission { get; set; }
 			public string CheckDamages { get; set; }
 			public string CheckBoatOrder { get; set; }
@@ -83,8 +86,8 @@ namespace Rokort_iPhone
 			public string guest { get; set; }
 			public string route { get; set; }
 			public string Description { get; set; }
-			public Nullable<DateTime> StartDateTime { get; set; }
-			public Nullable<DateTime> EndDateTime { get; set; }
+			public DateTime? StartDateTime { get; set; }
+			public DateTime? EndDateTime { get; set; }
 			public string Distance { get; set; }
 			public string Rower_list { get; set; }
 			public string Member_list { get; set; }
@@ -139,15 +142,12 @@ namespace Rokort_iPhone
 		{
 			String sessionCookie = await login(hc);
 
-			Group tripIdMatch = await fetchTripID (sessionCookie);
-			Console.WriteLine ("Succes " + tripIdMatch.Success + "Group[1] " + tripIdMatch + ", " + tripIdMatch.Value);
-			string tripId = tripIdMatch.Value;
+			await fetchTripInfo (sessionCookie);
 
 			var content = new ContentForRequest {
-				ID = tripId,
-				xStart = tripStartTime,
+				ID = ongoingTrip.id,
+				xStart = ongoingTrip.startTime,
 				xEnd = null,
-				StartDateTime = tripStartTime,
 				EndDateTime = DateTime.Now,
 				Distance = distance+"",
 				Completed = "1",
@@ -171,12 +171,11 @@ namespace Rokort_iPhone
 		public async Task<bool> hasOngoingTrip ()
 		{
 			String sessionCookie = await login (hc);
-			var tripIdGroup = await fetchTripID (sessionCookie);
-			Console.WriteLine ("tripId: " + tripIdGroup);
-			return tripIdGroup.Success;
+			await fetchTripInfo (sessionCookie);
+			return ongoingTrip != null;
 		}
 
-		async Task<Group> fetchTripID (string sessionCookie)
+		async Task fetchTripInfo (string sessionCookie)
 		{
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "http://www.rokort.dk/workshop/workshop2.php");
 			message.Headers.Add("Cookie", sessionCookie);
@@ -184,8 +183,35 @@ namespace Rokort_iPhone
 			HttpResponseMessage response = await hc.SendAsync (message);
 			String responseBody = await response.Content.ReadAsStringAsync ();
 
-			Match match = Regex.Match (responseBody, "<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + RowerId + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>");
-			return match.Groups[1];
+			Match match = Regex.Match (responseBody, 
+				"<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + RowerId + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>" +
+				"[^<]*" + 
+				"<td class=\"no_wrap\" onclick=\"showWin\\('row_edit.php\\?id=[0-9]*'\\);\">([^<]*)</td>");
+			Console.WriteLine (responseBody + ", 1:" + match.Groups [1] + ", 2:" + match.Groups [2]);
+
+			string startDateString = DateTime.Now.ToString("yyyy-MM-dd") + " " + match.Groups[2]; // match.Groups[2] has values like "12:01" or "08:05"
+			DateTime startDateTime = DateTime.ParseExact (startDateString, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+			if (match.Success) {
+				ongoingTrip = new TripInfo {
+					id = match.Groups [1].Value,
+					startTime = startDateTime
+				};
+			} else {
+				ongoingTrip = null;
+			}
+
+			Console.WriteLine ("onGoingTrip: " + ongoingTrip);
+		}
+	}
+
+	public class TripInfo
+	{
+		public string id {get; set; }
+		public DateTime startTime {get; set; }
+		public override string ToString ()
+		{
+			return string.Format ("[TripInfo: id={0}, startTime={1}]", id, startTime);
 		}
 	}
 }
