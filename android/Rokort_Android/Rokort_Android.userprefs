@@ -1,13 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MainActivity.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../core/Rokort_Service.cs">
     <Files>
-      <File FileName="MainActivity.cs" Line="12" Column="38" />
+      <File FileName="MainActivity.cs" Line="35" Column="30" />
+      <File FileName="Resources/values/Strings.xml" Line="4" Column="2" />
+      <File FileName="../../core/Rokort_Service.cs" Line="150" Column="35" />
+      <File FileName="Resources/Resource.designer.cs" Line="102" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Rokort__Android AndroidDeviceId-Debug="0443ecce308ab7af" />
+  <MonoDevelop.Ide.ItemProperties.Rokort__Android />
 </Properties>

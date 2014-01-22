@@ -6,27 +6,47 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
+using Rokort_iPhone;
+
 namespace Rokort_Android
 {
-	[Activity (Label = "Rokort_Android", MainLauncher = true)]
+	[Activity (Label = "Rokort", MainLauncher = true)]
 	public class MainActivity : Activity
 	{
-		int count = 1;
+		bool isTripStarted;
+		Rokort_Service rokortService;
+		Button button;
 
-		protected override void OnCreate (Bundle bundle)
+		protected override async void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
+			button = FindViewById<Button> (Resource.Id.myButton);
 
-			// Get our button from the layout resource,
-			// and attach an event to it
-			Button button = FindViewById<Button> (Resource.Id.myButton);
-			
-			button.Click += delegate {
-				button.Text = string.Format ("{0} clicks!", count++);
+			rokortService = new Rokort_Service ();
+			isTripStarted = await rokortService.hasOngoingTrip ();
+			updateUi();
+
+			button.Click += async delegate {
+				button.Enabled = false;
+				if (isTripStarted) {
+					await rokortService.stopTrip(0);
+					isTripStarted = false;
+				} else {
+					await rokortService.startTrip ();
+					isTripStarted = true;
+				}
+				updateUi();
 			};
+		}
+
+		void updateUi ()
+		{
+			int buttonTitle = isTripStarted ? Resource.String.stop_trip : Resource.String.start_trip;
+			button.Text = GetString (buttonTitle);
+			button.Enabled = true;
 		}
 	}
 }
