@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="Images\Icons\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -84,21 +85,25 @@
     <Folder Include="core\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\Icons\29_icon.png" />
-    <Content Include="Images\Icons\50_icon.png" />
-    <Content Include="Images\Icons\57_icon.png" />
-    <Content Include="Images\Icons\58_icon.png" />
-    <Content Include="Images\Icons\72_icon.png" />
-    <Content Include="Images\Icons\114_icon.png" />
-    <Content Include="Default.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ITunesArtwork Include="Images\Icons\512_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Default-568h%402x.png" />
     <BundleResource Include="..\..\resources\background.jpg">
       <Link>background.jpg</Link>
     </BundleResource>
+    <BundleResource Include="Images\Icons\Icon-40.png" />
+    <BundleResource Include="Images\Icons\Icon-40%402x.png" />
+    <BundleResource Include="Images\Icons\Icon-60.png" />
+    <BundleResource Include="Images\Icons\Icon-60%402x.png" />
+    <BundleResource Include="Images\Icons\Icon-72.png" />
+    <BundleResource Include="Images\Icons\Icon-72%402x.png" />
+    <BundleResource Include="Images\Icons\Icon-76.png" />
+    <BundleResource Include="Images\Icons\Icon-76%402x.png" />
+    <BundleResource Include="Images\Icons\Icon-Small-50.png" />
+    <BundleResource Include="Images\Icons\Icon-Small-50%402x.png" />
+    <BundleResource Include="Images\Icons\Icon-Small.png" />
+    <BundleResource Include="Images\Icons\Icon-Small%402x.png" />
+    <BundleResource Include="Images\Icons\Icon.png" />
+    <BundleResource Include="Images\Icons\Icon%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
   </ItemGroup>
 </Project>
