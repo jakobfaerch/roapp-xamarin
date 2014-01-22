@@ -43,7 +43,7 @@ namespace Rokort_iPhone
 
 			rokortService = new Rokort_Service ();
 
-			isTripStarted = await rokortService.hasOngoingTrip ();
+            isTripStarted = await rokortService.hasOngoingTrip (rowerModel.getRowerId(rowerPicker));
 			updateUi();
 			Console.WriteLine("hasOnGoingTrip: " + isTripStarted);
 
@@ -51,7 +51,7 @@ namespace Rokort_iPhone
 			this.btnClickMe.TouchUpInside += async (sender, e) => {
 				this.btnClickMe.Enabled = false;
 				if (isTripStarted) {
-					await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0));
+                    await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0), rowerModel.getRowerId(rowerPicker));
 					isTripStarted = false;
 				} else {
                     await rokortService.startTrip (rowerModel.getRowerId(rowerPicker), boatModel.GetBoatId(boatPicker));

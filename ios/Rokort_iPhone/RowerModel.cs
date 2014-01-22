@@ -47,6 +47,12 @@ namespace Rokort_iPhone
 		{
 			return rowerIds [picker.SelectedRowInComponent (0)];
 		}
+
+        public override void DidChangeValue (string forKey)
+        {
+            base.DidChangeValue (forKey);
+            Console.WriteLine ("Rower change for key" + forKey);
+        }
     }
 }
 
