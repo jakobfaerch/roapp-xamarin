@@ -12,8 +12,6 @@ namespace Rokort_iPhone
 {
 	public class Rokort_Service
 	{
-		private const string BOAT_ID = "080";
-
 		private const string apiDateFormat = "yyyy-MM-dd HH:mm:ss";
 		HttpClient hc;
 		static TripInfo ongoingTrip = null;
@@ -62,7 +60,7 @@ namespace Rokort_iPhone
 				CheckBoatOrder = "1";
 				CheckReservations = "1";
 				action = "update";
-				BoatID = BOAT_ID;
+                BoatID = null;
 				guest = "";
 				route = "1";
 				Description = "Brabrand Sø";
