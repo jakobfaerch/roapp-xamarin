@@ -45,7 +45,7 @@ namespace Rokort_iPhone
 
 			var response = await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);
 
-			Console.WriteLine ("Turen er startet, http status " + response.StatusCode);
+			Console.WriteLine ("Turen er startet, http status " + response.StatusCode + ", response " + await response.Content.ReadAsStringAsync ());
 		}
 
 		class ContentForRequest
@@ -155,7 +155,7 @@ namespace Rokort_iPhone
 
 			var response = await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);
 
-			Console.WriteLine ("Turen er stoppet, http status " + response.StatusCode);
+			Console.WriteLine ("Turen er stoppet, http status " + response.StatusCode + ", response " + await response.Content.ReadAsStringAsync ());
 		}
 
 		async Task<String> login (HttpClient hc)
@@ -172,7 +172,7 @@ namespace Rokort_iPhone
 		{
 			String sessionCookie = await login (hc);
 			var tripIdGroup = await fetchTripID (sessionCookie);
-			Console.WriteLine ("tripIdGroup: " + tripIdGroup);
+			Console.WriteLine ("tripId: " + tripIdGroup);
 			return tripIdGroup.Success;
 		}
 
