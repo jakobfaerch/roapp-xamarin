@@ -22,9 +22,11 @@ namespace Rokort_iPhone
 		public override UIView GetView (UIPickerView picker, int row, int component, UIView view)
 		{
 			var label = new UILabel ();
-			label.Text = "" + row;
+			label.Text = "" + row + " km";
 			label.TextColor = UIColor.White;
 			label.TextAlignment = UITextAlignment.Center;
+			label.Font = UIFont.FromName("Helvetica-Light", 32f);
+
 			return label;
 		}
     }
