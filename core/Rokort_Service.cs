@@ -189,10 +189,10 @@ namespace Rokort_iPhone
 				"<td class=\"no_wrap\" onclick=\"showWin\\('row_edit.php\\?id=[0-9]*'\\);\">([^<]*)</td>");
 			Console.WriteLine (responseBody + ", 1:" + match.Groups [1] + ", 2:" + match.Groups [2]);
 
-			string startDateString = DateTime.Now.ToString("yyyy-MM-dd") + " " + match.Groups[2]; // match.Groups[2] has values like "12:01" or "08:05"
-			DateTime startDateTime = DateTime.ParseExact (startDateString, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-
 			if (match.Success) {
+				string startDateString = DateTime.Now.ToString("yyyy-MM-dd") + " " + match.Groups[2].Value; // match.Groups[2] has values like "12:01" or "08:05"
+				DateTime startDateTime = DateTime.ParseExact (startDateString, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
 				ongoingTrip = new TripInfo {
 					id = match.Groups [1].Value,
 					startTime = startDateTime
