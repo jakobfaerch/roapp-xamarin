@@ -1,5 +1,3 @@
-using MonoTouch.UIKit;
-using System.Drawing;
 using System;
 using System.Text.RegularExpressions;
 using System.Linq;
@@ -8,7 +6,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using MonoTouch.Foundation;
 
 namespace Rokort_iPhone
 {
