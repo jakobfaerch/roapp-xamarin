@@ -45,7 +45,10 @@ namespace Rokort_Android
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			public const int background = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int Icon = 2130837505;
 			
 			static Drawable()
 			{
@@ -60,8 +63,14 @@ namespace Rokort_Android
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050001
+			public const int editTextDistance = 2131034113;
+			
 			// aapt resource value: 0x7f050000
 			public const int myButton = 2131034112;
+			
+			// aapt resource value: 0x7f050002
+			public const int textViewDistanceLabel = 2131034114;
 			
 			static Id()
 			{
@@ -94,6 +103,9 @@ namespace Rokort_Android
 			
 			// aapt resource value: 0x7f040002
 			public const int app_name = 2130968578;
+			
+			// aapt resource value: 0x7f040003
+			public const int distance_unit_hint = 2130968579;
 			
 			// aapt resource value: 0x7f040000
 			public const int start_trip = 2130968576;
