@@ -142,7 +142,9 @@ namespace Rokort_iPhone
 		{
 			String sessionCookie = await login(hc);
 
-			String tripId = await fetchTripID (sessionCookie);
+			Group tripIdMatch = await fetchTripID (sessionCookie);
+			Console.WriteLine ("Succes " + tripIdMatch.Success + "Group[1] " + tripIdMatch + ", " + tripIdMatch.Value);
+			string tripId = tripIdMatch.Value;
 
 			var content = new ContentForRequest {
 				ID = tripId,
@@ -169,7 +171,15 @@ namespace Rokort_iPhone
 			return cookieHeaderValue;
 		}
 
-		async Task<String> fetchTripID (string sessionCookie)
+		public async Task<bool> hasOngoingTrip ()
+		{
+			String sessionCookie = await login (hc);
+			var tripIdGroup = await fetchTripID (sessionCookie);
+			Console.WriteLine ("tripIdGroup: " + tripIdGroup);
+			return tripIdGroup.Success;
+		}
+
+		async Task<Group> fetchTripID (string sessionCookie)
 		{
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "http://www.rokort.dk/workshop/workshop2.php");
 			message.Headers.Add("Cookie", sessionCookie);
@@ -178,9 +188,7 @@ namespace Rokort_iPhone
 			String responseBody = await response.Content.ReadAsStringAsync ();
 
 			Match match = Regex.Match (responseBody, "<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + RowerId + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>");
-			var tripId = match.Groups [1];
-			Console.WriteLine ("Succes " + match.Success + "Group[1] " + tripId);
-			return tripId.Value;
+			return match.Groups[1];
 		}
 	}
 }

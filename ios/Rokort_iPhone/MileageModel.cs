@@ -3,13 +3,11 @@ using MonoTouch.UIKit;
 
 namespace Rokort_iPhone
 {
-	public class MileageDataSource: UIPickerViewModel
+	public class MileageModel: UIPickerViewModel
     {
-        public MileageDataSource ()
+        public MileageModel ()
         {
         }
-
-		#region implemented abstract members of UIPickerViewDataSource
 
 		public override int GetComponentCount (UIPickerView pickerView)
 		{
@@ -21,11 +19,13 @@ namespace Rokort_iPhone
 			return 20;
 		}
 
-		#endregion
-
-		public override string GetTitle(UIPickerView view, int row, int component)
+		public override UIView GetView (UIPickerView picker, int row, int component, UIView view)
 		{
-			return ""+row;
+			var label = new UILabel ();
+			label.Text = "" + row;
+			label.TextColor = UIColor.White;
+			label.TextAlignment = UITextAlignment.Center;
+			return label;
 		}
     }
 }

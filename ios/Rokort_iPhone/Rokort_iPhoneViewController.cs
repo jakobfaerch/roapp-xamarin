@@ -1,6 +1,7 @@
 using MonoTouch.UIKit;
 using MonoTouch.Foundation;
 using System;
+using System.Threading.Tasks;
 
 
 namespace Rokort_iPhone
@@ -22,15 +23,21 @@ namespace Rokort_iPhone
 			// Release any cached data, images, etc that aren't in use.
 		}
 		
-		public override void ViewDidLoad ()
+		public override async void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 
-			Console.WriteLine (this.pickerView);
-			this.pickerView.Model = new MileageDataSource ();
+			this.btnClickMe.SetTitle ("...", UIControlState.Disabled);
+			this.btnClickMe.Enabled = false;
 			this.pickerView.Hidden = true;
 
+			this.pickerView.Model = new MileageModel ();
+
 			rokortService = new Rokort_Service ();
+
+			isTripStarted = await rokortService.hasOngoingTrip ();
+			updateUi();
+			Console.WriteLine("hasOnGoingTrip: " + isTripStarted);
 
 			//---- wire up our click me button
 			this.btnClickMe.TouchUpInside += async (sender, e) => {
@@ -44,7 +51,6 @@ namespace Rokort_iPhone
 				}
 				updateUi();
 			};
-
 		}
 
 		void updateUi ()
