@@ -3,6 +3,7 @@
 	<string name="start_trip">Start tur</string>
 	<string name="stop_trip">Stop tur</string>
 	<string name="app_name">Rokort</string>
+	<string name="button_disabled_text">...</string>
 
 	<string name="distance_unit_hint">Indtast distance [km]</string>
 </resources>

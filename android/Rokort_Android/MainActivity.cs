@@ -37,6 +37,7 @@ namespace Rokort_Android
 
 			button.Click += async delegate {
 				button.Enabled = false;
+				button.Text = GetString(Resource.String.button_disabled_text);
 				if (isTripStarted) {
 					await rokortService.stopTrip(Convert.ToInt16(editTextDistance.Text));
 					isTripStarted = false;

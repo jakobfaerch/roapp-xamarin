@@ -105,7 +105,10 @@ namespace Rokort_Android
 			public const int app_name = 2130968578;
 			
 			// aapt resource value: 0x7f040003
-			public const int distance_unit_hint = 2130968579;
+			public const int button_disabled_text = 2130968579;
+			
+			// aapt resource value: 0x7f040004
+			public const int distance_unit_hint = 2130968580;
 			
 			// aapt resource value: 0x7f040000
 			public const int start_trip = 2130968576;

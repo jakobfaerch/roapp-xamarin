@@ -7,7 +7,11 @@
     <Button
         android:id="@+id/myButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="#00ffffff"
+        android:textSize="25sp"
+        android:text="@string/button_disabled_text"
+        android:gravity="center" />
     <EditText
         android:inputType="number"
         android:layout_width="match_parent"
