@@ -7,37 +7,47 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.IO.IsolatedStorage;
 
 namespace Rokort_iPhone
 {
 	public class Rokort_Service
 	{
 		private const string apiDateFormat = "yyyy-MM-dd HH:mm:ss";
-		HttpClient hc;
-		static TripInfo ongoingTrip = null;
+        private HttpClient hc;
+        private static TripInfo ongoingTrip = null;
+        private string rowerId;
 
 		public Rokort_Service ()
 		{
 			hc = makeHttpClient ();
+            rowerId = new RokortStorage ().RowerID;
 		}
+
+        public void setRowerId (string newRowerId)
+        {
+            rowerId = newRowerId;
+            new RokortStorage ().RowerID = newRowerId; 
+        }
 
 		HttpClient makeHttpClient ()
 		{
 			var handler = new HttpClientHandler {
 				UseCookies = false,
 				UseDefaultCredentials = false,
-				Proxy = new WebProxy ("http://192.168.1.116:8888", false, new string[] {}),
-				UseProxy = false,
+                Proxy = new WebProxy ("http://192.168.1.11:8888", false, new string[] {}),
+                UseProxy = true,
 			};
 			HttpClient hc = new HttpClient (handler);
 			return hc;
 		}
 
-		public async Task startTrip(String rowerId, String boatId)
+		public async Task startTrip(String boatId)
 		{
 			String sessionCookie = await login(hc);
 
-			ongoingTrip = new TripInfo{ startTime = DateTime.Now };
+            ongoingTrip = new TripInfo{ startTime = DateTime.Now };
 
 			var content = new ContentForRequest {
                 RowerID = rowerId,
@@ -49,7 +59,7 @@ namespace Rokort_iPhone
 			Console.WriteLine ("Turen er startet, http status " + response.StatusCode + ", response " + await response.Content.ReadAsStringAsync ());
 		}
 
-		class ContentForRequest
+        private class ContentForRequest
 		{
 			public ContentForRequest() {
 				ID = "";
@@ -106,7 +116,6 @@ namespace Rokort_iPhone
 					new KeyValuePair<string, string> ("CheckBoatOrder", CheckBoatOrder),
 					new KeyValuePair<string, string> ("CheckReservations", CheckReservations),
 					new KeyValuePair<string, string> ("action", action),
-					new KeyValuePair<string, string> ("BoatID", BoatID),
 					new KeyValuePair<string, string> ("guest", guest),
 					new KeyValuePair<string, string> ("route", route),
 					new KeyValuePair<string, string> ("Description", Description),
@@ -120,6 +129,13 @@ namespace Rokort_iPhone
 				if (Completed != "0") {
 					formValues.Add (new KeyValuePair<string, string> ("Completed", Completed));
 				}
+
+                if (BoatID != null) {
+                    formValues.Add (new KeyValuePair<string, string> ("BoatID", BoatID));
+                } else {
+                    formValues.Add (new KeyValuePair<string, string> ("BoatID", "080"));
+                    // TODO: temporary
+                }
 
 				HttpContent content = new FormUrlEncodedContent (formValues);
 
@@ -140,15 +156,15 @@ namespace Rokort_iPhone
 			}
 		}
 
-        public async Task stopTrip (int distance, string rowerID)
+        public async Task stopTrip (int distance)
 		{
 			String sessionCookie = await login(hc);
 
-            await fetchTripInfo (sessionCookie, rowerID);
+            await fetchTripInfo (sessionCookie);
 
 			var content = new ContentForRequest {
 				ID = ongoingTrip.id,
-                RowerID = rowerID,
+                RowerID = rowerId,
 				xStart = ongoingTrip.startTime,
 				xEnd = null,
 				EndDateTime = DateTime.Now,
@@ -172,14 +188,14 @@ namespace Rokort_iPhone
 			return cookieHeaderValue;
 		}
 
-        public async Task<bool> hasOngoingTrip (string rowerId)
+        public async Task<bool> hasOngoingTrip ()
 		{
 			String sessionCookie = await login (hc);
-            await fetchTripInfo (sessionCookie, rowerId);
+            await fetchTripInfo (sessionCookie);
 			return ongoingTrip != null;
 		}
 
-        async Task fetchTripInfo (string sessionCookie, string rowerID)
+        async Task fetchTripInfo (string sessionCookie)
 		{
 			HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "http://www.rokort.dk/workshop/workshop2.php");
 			message.Headers.Add("Cookie", sessionCookie);
@@ -188,10 +204,10 @@ namespace Rokort_iPhone
 			String responseBody = await response.Content.ReadAsStringAsync ();
 
 			Match match = Regex.Match (responseBody, 
-                "<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + rowerID + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>" +
+                "<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + rowerId + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>" +
 				"[^<]*" + 
 				"<td class=\"no_wrap\" onclick=\"showWin\\('row_edit.php\\?id=[0-9]*'\\);\">([^<]*)</td>");
-            Console.WriteLine ("Searching for rower with id " + rowerID + ", response: " + responseBody + ", 1:" + match.Groups [1] + ", 2:" + match.Groups [2]);
+            Console.WriteLine ("Searching for rower with id " + rowerId + ", response: " + responseBody + ", 1:" + match.Groups [1] + ", 2:" + match.Groups [2]);
 
 			if (match.Success) {
 				string startDateString = DateTime.Now.ToString("yyyy-MM-dd") + " " + match.Groups[2].Value; // match.Groups[2] has values like "12:01" or "08:05"
@@ -205,7 +221,7 @@ namespace Rokort_iPhone
 				ongoingTrip = null;
 			}
 
-            Console.WriteLine ("onGoingTrip for rower " + rowerID + ": " + ongoingTrip);
+            Console.WriteLine ("onGoingTrip for rower " + rowerId + ": " + ongoingTrip);
 		}
 	}
 
@@ -218,5 +234,47 @@ namespace Rokort_iPhone
 			return string.Format ("[TripInfo: id={0}, startTime={1}]", id, startTime);
 		}
 	}
+
+    public class RokortStorage 
+    {
+        private IsolatedStorageFile storage = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
+
+        public String RowerID {
+            get
+            {
+                return ReadRowerId();
+            }
+            set 
+            {
+                StoreRowerId (value);
+            }
+        }
+
+        private string ReadRowerId()
+        {
+            string readId = null;
+            if (storage.FileExists ("rowerId")) {
+                using (IsolatedStorageFileStream file = storage.OpenFile ("rowerId", FileMode.Open)) {
+                    using (StreamReader reader = new StreamReader (file)) {
+                        readId = reader.ReadToEnd ();
+                    }
+                    Console.WriteLine ("Read rower id " + readId + " from storage");
+                }
+            }
+
+            return readId;
+        }
+
+        public void StoreRowerId (string newId)
+        {
+            using (IsolatedStorageFileStream file = storage.OpenFile ("rowerId", FileMode.Create)) {
+                using (StreamWriter writer = new StreamWriter(file))
+                {
+                    writer.Write(newId);
+                }
+                Console.WriteLine ("Wrote rower id " + newId + " to storage");
+            }
+        }
+    }
 }
 

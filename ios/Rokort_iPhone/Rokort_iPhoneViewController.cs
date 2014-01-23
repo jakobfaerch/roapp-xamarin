@@ -34,16 +34,23 @@ namespace Rokort_iPhone
 			this.btnClickMe.SetTitle ("...", UIControlState.Disabled);
 			this.btnClickMe.Enabled = false;
 			this.pickerView.Hidden = true;
+            this.rowerPicker.Hidden = true;
+            this.boatPicker.Hidden = true;
 
 			this.pickerView.Model = new MileageModel ();
-			rowerModel = new RowerModel ();
+
+            rowerModel = new RowerModel ();
 			this.rowerPicker.Model = rowerModel;
-			boatModel = new BoatModel ();
+
+            boatModel = new BoatModel ();
 			this.boatPicker.Model = boatModel;
 
 			rokortService = new Rokort_Service ();
+            // TODO: Select rower from rowerService in UI picker
+            //rokortService.setRowerId ("1542");
+            this.rowerPicker.Hidden = false;
 
-            isTripStarted = await rokortService.hasOngoingTrip (rowerModel.getRowerId(rowerPicker));
+            isTripStarted = await rokortService.hasOngoingTrip ();
 			updateUi();
 			Console.WriteLine("hasOnGoingTrip: " + isTripStarted);
 
@@ -51,10 +58,11 @@ namespace Rokort_iPhone
 			this.btnClickMe.TouchUpInside += async (sender, e) => {
 				this.btnClickMe.Enabled = false;
 				if (isTripStarted) {
-                    await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0), rowerModel.getRowerId(rowerPicker));
+                    await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0));
 					isTripStarted = false;
 				} else {
-                    await rokortService.startTrip (rowerModel.getRowerId(rowerPicker), boatModel.GetBoatId(boatPicker));
+                    rokortService.setRowerId(rowerModel.getRowerId(rowerPicker));
+                    await rokortService.startTrip (boatModel.GetBoatId(boatPicker));
 					isTripStarted = true;
 				}
 				updateUi();
