@@ -115,7 +115,8 @@ namespace Rokort_iPhone
 					new KeyValuePair<string, string> ("CheckDamages", CheckDamages),
 					new KeyValuePair<string, string> ("CheckBoatOrder", CheckBoatOrder),
 					new KeyValuePair<string, string> ("CheckReservations", CheckReservations),
-					new KeyValuePair<string, string> ("action", action),
+                    new KeyValuePair<string, string> ("BoatID", BoatID),
+                    new KeyValuePair<string, string> ("action", action),
 					new KeyValuePair<string, string> ("guest", guest),
 					new KeyValuePair<string, string> ("route", route),
 					new KeyValuePair<string, string> ("Description", Description),
@@ -129,13 +130,6 @@ namespace Rokort_iPhone
 				if (Completed != "0") {
 					formValues.Add (new KeyValuePair<string, string> ("Completed", Completed));
 				}
-
-                if (BoatID != null) {
-                    formValues.Add (new KeyValuePair<string, string> ("BoatID", BoatID));
-                } else {
-                    formValues.Add (new KeyValuePair<string, string> ("BoatID", "080"));
-                    // TODO: temporary
-                }
 
 				HttpContent content = new FormUrlEncodedContent (formValues);
 
@@ -165,6 +159,7 @@ namespace Rokort_iPhone
 			var content = new ContentForRequest {
 				ID = ongoingTrip.id,
                 RowerID = rowerId,
+                BoatID = ongoingTrip.boatID,
 				xStart = ongoingTrip.startTime,
 				xEnd = null,
 				EndDateTime = DateTime.Now,
@@ -204,17 +199,19 @@ namespace Rokort_iPhone
 			String responseBody = await response.Content.ReadAsStringAsync ();
 
 			Match match = Regex.Match (responseBody, 
+                "<td onclick=\"showWin\\('row_edit.php\\?id=[0-9]*'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=b_[0-9]*\" onclick=\"javascript:return\\(false\\)\">([0-9]*)</a></span></td>" +
+                "[^<]*" + 
                 "<td onclick=\"showWin\\('row_edit.php\\?id=([0-9]*)'\\);\"><span class=\"tooltip\"><a href=\"workshop.php\\?lookup=r_" + rowerId + "\" onclick=\"javascript:return\\(false\\)\">[^<]*</a></span></td>" +
 				"[^<]*" + 
 				"<td class=\"no_wrap\" onclick=\"showWin\\('row_edit.php\\?id=[0-9]*'\\);\">([^<]*)</td>");
-            Console.WriteLine ("Searching for rower with id " + rowerId + ", response: " + responseBody + ", 1:" + match.Groups [1] + ", 2:" + match.Groups [2]);
 
-			if (match.Success) {
-				string startDateString = DateTime.Now.ToString("yyyy-MM-dd") + " " + match.Groups[2].Value; // match.Groups[2] has values like "12:01" or "08:05"
+            if (match.Success) {
+				string startDateString = DateTime.Now.ToString("yyyy-MM-dd") + " " + match.Groups[3].Value; // match.Groups[3] has values like "12:01" or "08:05"
 				DateTime startDateTime = DateTime.ParseExact (startDateString, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
 
 				ongoingTrip = new TripInfo {
-					id = match.Groups [1].Value,
+                    id = match.Groups [2].Value,
+                    boatID = match.Groups[1].Value,
 					startTime = startDateTime
 				};
 			} else {
@@ -228,10 +225,11 @@ namespace Rokort_iPhone
 	public class TripInfo
 	{
 		public string id {get; set; }
+        public string boatID { get; set; }
 		public DateTime startTime {get; set; }
 		public override string ToString ()
 		{
-			return string.Format ("[TripInfo: id={0}, startTime={1}]", id, startTime);
+            return string.Format ("[TripInfo: id={0}, boatID={1}, startTime={2}]", id, boatID, startTime);
 		}
 	}
 

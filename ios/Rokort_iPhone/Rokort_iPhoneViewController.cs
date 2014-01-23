@@ -27,11 +27,12 @@ namespace Rokort_iPhone
             setInitialUiState();
 
             rokortService = new Rokort_Service ();
-            // TODO: Select rower from rowerService in UI picker
 
             // TODO: Detect changes to the rower picker and update isTripStarted and UIstate
 
             setupPickerModels();
+
+            // TODO: Select rower from service in rowerPicker
 
             this.rowerPicker.Hidden = false;
 
