@@ -18,18 +18,21 @@ namespace Rokort_iPhone
         private HttpClient hc;
         private static TripInfo ongoingTrip = null;
         private string rowerId;
+        public string RowerId {
+            get {
+                return rowerId;
+            }
+            set {
+                rowerId = value;
+                new RokortStorage ().RowerID = value;
+            }
+        }
 
 		public Rokort_Service ()
 		{
 			hc = makeHttpClient ();
-            rowerId = new RokortStorage ().RowerID;
+            RowerId = new RokortStorage ().RowerID;
 		}
-
-        public void setRowerId (string newRowerId)
-        {
-            rowerId = newRowerId;
-            new RokortStorage ().RowerID = newRowerId; 
-        }
 
 		HttpClient makeHttpClient ()
 		{
