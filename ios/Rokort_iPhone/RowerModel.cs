@@ -32,6 +32,18 @@ namespace Rokort_iPhone
 			return 2;
 		}
 
+        public int GetRowForRowerId (string rowerId)
+        {
+            foreach(var entry in rowerIds)
+            {
+                if (entry.Value == rowerId) {
+                    return entry.Key;
+                }
+            }
+
+            return 0;
+        }
+
 		public override UIView GetView (UIPickerView picker, int row, int component, UIView view)
 		{
 			var label = new UILabel ();

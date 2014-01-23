@@ -23,18 +23,15 @@ namespace Rokort_iPhone
         {
             base.ViewWillAppear (animated);
 
-
             setInitialUiState();
 
             rokortService = new Rokort_Service ();
 
-            // TODO: Detect changes to the rower picker and update isTripStarted and UIstate
+            // Possible TODO: Detect changes to the rower picker and update isTripStarted and UIstate
 
             setupPickerModels();
 
-            // TODO: Select rower from service in rowerPicker
-
-            this.rowerPicker.Hidden = false;
+            this.rowerPicker.Select (rowerModel.GetRowForRowerId(rokortService.RowerId), 0, true);
 
             await updateUi();
         }
@@ -48,7 +45,7 @@ namespace Rokort_iPhone
 				if (isTripStarted) {
                     await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0));
 				} else {
-                    rokortService.setRowerId(rowerModel.getRowerId(rowerPicker));
+                    rokortService.RowerId = rowerModel.getRowerId(rowerPicker);
                     await rokortService.startTrip (boatModel.GetBoatId(boatPicker));
 				}
                 await updateUi();
@@ -67,7 +64,6 @@ namespace Rokort_iPhone
         void setInitialUiState()
         {
             this.btnClickMe.SetTitle ("...", UIControlState.Disabled);
-            this.btnClickMe.Enabled = false;
             this.pickerView.Hidden = true;
             this.rowerPicker.Hidden = true;
             this.boatPicker.Hidden = true;
@@ -75,11 +71,12 @@ namespace Rokort_iPhone
 
         async Task updateUi ()
 		{
+            this.btnClickMe.Enabled = false;
             isTripStarted = await rokortService.hasOngoingTrip ();
 			var buttonTitle = isTripStarted ? "Stop tur" : "Start tur";
 			this.btnClickMe.SetTitle (buttonTitle, UIControlState.Normal);
 			this.btnClickMe.Enabled = true;
-			this.pickerView.Hidden = !isTripStarted;
+            this.pickerView.Hidden = !isTripStarted;
 			this.boatPicker.Hidden = isTripStarted;
 			this.rowerPicker.Hidden = isTripStarted;
 		}
