@@ -43,15 +43,15 @@ namespace Rokort_iPhone
 			return hc;
 		}
 
-		public async Task startTrip(String boatId)
+		public async Task startTrip(String rowerId, String boatId)
 		{
 			String sessionCookie = await login(hc);
 
             ongoingTrip = new TripInfo{ startTime = DateTime.Now };
 
 			var content = new ContentForRequest {
-                RowerID = rowerId,
-                BoatID = boatId,
+				RowerID = rowerId,
+				BoatID = boatId,
 			}.build (sessionCookie);
 
 			var response = await hc.PostAsync ("http://www.rokort.dk/workshop/row_update.php", content);

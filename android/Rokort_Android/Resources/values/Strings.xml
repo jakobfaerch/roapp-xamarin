@@ -6,4 +6,16 @@
 	<string name="button_disabled_text">...</string>
 
 	<string name="distance_unit_hint">Indtast distance [km]</string>
+
+	<string name="rower_names_prompt">Choose a planet</string>
+	<string name="boats_prompt">Choose a planet</string>
+	<string-array name="spinner_rower_names_array">
+        <item>Jakob Roesgaard Færch</item>
+        <item>Trine Roesgaard Færch</item>
+    </string-array>
+
+     <string-array name="spinner_boats_array">
+        <item>ÅKS Brabrand - Ener</item>
+        <item>Gæstebåd</item>
+    </string-array>
 </resources>

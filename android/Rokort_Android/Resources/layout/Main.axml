@@ -9,26 +9,51 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#00ffffff"
-        android:textSize="25sp"
+        android:textSize="48sp"
         android:text="@string/button_disabled_text"
-        android:gravity="center" />
-    <EditText
-        android:inputType="number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextDistance"
-        android:layout_marginTop="20dp"
-        android:textColor="#ffffffff"
-        android:ellipsize="start"
-        android:gravity="center_horizontal"
-        android:visibility="invisible" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewDistanceLabel"
-        android:textColor="#92d3d3d3"
-        android:textSize="10dp"
-        android:ellipsize="start"
-        android:gravity="center_horizontal"
-        android:visibility="invisible" />
+        android:gravity="center"
+        android:layout_marginTop="150dp"
+        android:typeface="sans"
+        android:textStyle="normal" />
+    <LinearLayout
+        android:id="@+id/start_trip_wrapper"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone">
+        <Spinner
+            android:id="@+id/spinnerRowerNames"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/rower_names_prompt" />
+        <Spinner
+            android:id="@+id/spinnerBoats"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/boats_prompt" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/stop_trip_wrapper"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone">
+        <EditText
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextDistance"
+            android:layout_marginTop="20dp"
+            android:textColor="#ffffffff"
+            android:ellipsize="start"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewDistanceLabel"
+            android:textColor="#92d3d3d3"
+            android:textSize="10dp"
+            android:ellipsize="start"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
 </LinearLayout>

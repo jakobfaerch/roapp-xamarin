@@ -28,6 +28,25 @@ namespace Rokort_Android
 		{
 		}
 		
+		public partial class Array
+		{
+			
+			// aapt resource value: 0x7f050001
+			public const int spinner_boats_array = 2131034113;
+			
+			// aapt resource value: 0x7f050000
+			public const int spinner_rower_names_array = 2131034112;
+			
+			static Array()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Array()
+			{
+			}
+		}
+		
 		public partial class Attribute
 		{
 			
@@ -63,14 +82,26 @@ namespace Rokort_Android
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050001
-			public const int editTextDistance = 2131034113;
+			// aapt resource value: 0x7f060005
+			public const int editTextDistance = 2131099653;
 			
-			// aapt resource value: 0x7f050000
-			public const int myButton = 2131034112;
+			// aapt resource value: 0x7f060000
+			public const int myButton = 2131099648;
 			
-			// aapt resource value: 0x7f050002
-			public const int textViewDistanceLabel = 2131034114;
+			// aapt resource value: 0x7f060003
+			public const int spinnerBoats = 2131099651;
+			
+			// aapt resource value: 0x7f060002
+			public const int spinnerRowerNames = 2131099650;
+			
+			// aapt resource value: 0x7f060001
+			public const int start_trip_wrapper = 2131099649;
+			
+			// aapt resource value: 0x7f060004
+			public const int stop_trip_wrapper = 2131099652;
+			
+			// aapt resource value: 0x7f060006
+			public const int textViewDistanceLabel = 2131099654;
 			
 			static Id()
 			{
@@ -104,11 +135,17 @@ namespace Rokort_Android
 			// aapt resource value: 0x7f040002
 			public const int app_name = 2130968578;
 			
+			// aapt resource value: 0x7f040006
+			public const int boats_prompt = 2130968582;
+			
 			// aapt resource value: 0x7f040003
 			public const int button_disabled_text = 2130968579;
 			
 			// aapt resource value: 0x7f040004
 			public const int distance_unit_hint = 2130968580;
+			
+			// aapt resource value: 0x7f040005
+			public const int rower_names_prompt = 2130968581;
 			
 			// aapt resource value: 0x7f040000
 			public const int start_trip = 2130968576;
