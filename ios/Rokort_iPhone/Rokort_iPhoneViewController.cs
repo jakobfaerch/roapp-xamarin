@@ -18,59 +18,63 @@ namespace Rokort_iPhone
 		public Rokort_iPhoneViewController (string nibName, NSBundle bundle) : base (nibName, bundle)
 		{
 		}
-		
-		public override void DidReceiveMemoryWarning ()
-		{
-			// Releases the view if it doesn't have a superview.
-			base.DidReceiveMemoryWarning ();
-			
-			// Release any cached data, images, etc that aren't in use.
-		}
+
+        public override async void ViewWillAppear (bool animated)
+        {
+            base.ViewWillAppear (animated);
+
+
+            setInitialUiState();
+
+            rokortService = new Rokort_Service ();
+            // TODO: Select rower from rowerService in UI picker
+
+            // TODO: Detect changes to the rower picker and update isTripStarted and UIstate
+
+            setupPickerModels();
+
+            this.rowerPicker.Hidden = false;
+
+            await updateUi();
+        }
 		
 		public override async void ViewDidLoad ()
 		{
-			base.ViewDidLoad ();
+			base.ViewDidLoad();
 
-			this.btnClickMe.SetTitle ("...", UIControlState.Disabled);
-			this.btnClickMe.Enabled = false;
-			this.pickerView.Hidden = true;
-            this.rowerPicker.Hidden = true;
-            this.boatPicker.Hidden = true;
-
-			this.pickerView.Model = new MileageModel ();
-
-            rowerModel = new RowerModel ();
-			this.rowerPicker.Model = rowerModel;
-
-            boatModel = new BoatModel ();
-			this.boatPicker.Model = boatModel;
-
-			rokortService = new Rokort_Service ();
-            // TODO: Select rower from rowerService in UI picker
-            //rokortService.setRowerId ("1542");
-            this.rowerPicker.Hidden = false;
-
-            isTripStarted = await rokortService.hasOngoingTrip ();
-			updateUi();
-			Console.WriteLine("hasOnGoingTrip: " + isTripStarted);
-
-			//---- wire up our click me button
-			this.btnClickMe.TouchUpInside += async (sender, e) => {
+            this.btnClickMe.TouchUpInside += async (sender, e) => {
 				this.btnClickMe.Enabled = false;
 				if (isTripStarted) {
                     await rokortService.stopTrip(this.pickerView.SelectedRowInComponent(0));
-					isTripStarted = false;
 				} else {
                     rokortService.setRowerId(rowerModel.getRowerId(rowerPicker));
                     await rokortService.startTrip (boatModel.GetBoatId(boatPicker));
-					isTripStarted = true;
 				}
-				updateUi();
+                await updateUi();
 			};
 		}
 
-		void updateUi ()
+        void setupPickerModels ()
+        {
+            this.pickerView.Model = new MileageModel ();
+            rowerModel = new RowerModel ();
+            this.rowerPicker.Model = rowerModel;
+            boatModel = new BoatModel ();
+            this.boatPicker.Model = boatModel;
+        }
+
+        void setInitialUiState()
+        {
+            this.btnClickMe.SetTitle ("...", UIControlState.Disabled);
+            this.btnClickMe.Enabled = false;
+            this.pickerView.Hidden = true;
+            this.rowerPicker.Hidden = true;
+            this.boatPicker.Hidden = true;
+        }
+
+        async Task updateUi ()
 		{
+            isTripStarted = await rokortService.hasOngoingTrip ();
 			var buttonTitle = isTripStarted ? "Stop tur" : "Start tur";
 			this.btnClickMe.SetTitle (buttonTitle, UIControlState.Normal);
 			this.btnClickMe.Enabled = true;
