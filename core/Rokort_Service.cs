@@ -46,7 +46,7 @@ namespace Rokort_iPhone
 			return hc;
 		}
 
-		public async Task startTrip(String rowerId, String boatId)
+		public async Task startTrip(String boatId)
 		{
 			String sessionCookie = await login(hc);
 

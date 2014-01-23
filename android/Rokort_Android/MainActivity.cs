@@ -71,7 +71,8 @@ namespace Rokort_Android
 					await rokortService.stopTrip(Convert.ToInt16(editTextDistance.Text));
 					isTripStarted = false;
 				} else {
-					await rokortService.startTrip (selectedRowerId, selectedRowerId);
+					rokortService.RowerId = selectedRowerId;
+					await rokortService.startTrip (selectedBoatId);
 					isTripStarted = true;
 				}
 				updateUi();
