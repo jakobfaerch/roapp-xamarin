@@ -68,6 +68,7 @@
     <AndroidResource Include="..\..\resources\background.jpg">
       <Link>Resources\drawable\background.jpg</Link>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\SpinnerItem.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

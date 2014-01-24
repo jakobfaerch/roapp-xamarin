@@ -25,12 +25,14 @@
             android:id="@+id/spinnerRowerNames"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:prompt="@string/rower_names_prompt" />
+            android:prompt="@string/rower_names_prompt"
+            android:gravity="center" />
         <Spinner
             android:id="@+id/spinnerBoats"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:prompt="@string/boats_prompt" />
+            android:prompt="@string/boats_prompt"
+            android:gravity="center" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/stop_trip_wrapper"

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -24,10 +25,21 @@ namespace Rokort_Android
 		String selectedRowerId;
 		String selectedBoatId;
 
+		static List<KeyValuePair<String,String>> listRowerNames = new List<KeyValuePair<String,String>> ();
+		static List<KeyValuePair<String,String>> listBoatIds = new List<KeyValuePair<String,String>> ();
+
 		protected override async void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 			Window.RequestFeature (WindowFeatures.NoTitle);
+
+			// Initialize data
+			listRowerNames.Add (new KeyValuePair<String, String>("Jakob Roesgaard Færch", "1541"));
+				listRowerNames.Add (new KeyValuePair<String, String>("Trine Roesgaard Færch", "1542"));
+
+			listBoatIds.Add (new KeyValuePair<String, String>("ÅKS Brabrand - Ener", "090"));
+			listBoatIds.Add (new KeyValuePair<String, String>("Gæstebåd", "080"));
+			listBoatIds.Add (new KeyValuePair<String, String>("Ergometer", "500"));
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
@@ -42,26 +54,26 @@ namespace Rokort_Android
 			Spinner spinnerRowerNames = FindViewById<Spinner> (Resource.Id.spinnerRowerNames);
 
 			spinnerRowerNames.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs> (spinnerRowerNames_ItemSelected);
-			var adapterRowerNames = ArrayAdapter.CreateFromResource (
-				this, Resource.Array.spinner_rower_names_array, Android.Resource.Layout.SimpleSpinnerItem);
+			var adapterRowerNames = new CustomArrayAdapter(
+				this, listRowerNames, Resource.Layout.SpinnerItem);
 
-			adapterRowerNames.SetDropDownViewResource (Android.Resource.Layout.SimpleSpinnerDropDownItem);
+			adapterRowerNames.SetDropDownViewResource (Resource.Layout.SpinnerItem);
 			spinnerRowerNames.Adapter = adapterRowerNames;
 
 
 			Spinner spinnerBoats = FindViewById<Spinner> (Resource.Id.spinnerBoats);
 
 			spinnerBoats.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs> (spinnerBoats_ItemSelected);
-			var adapterBoats = ArrayAdapter.CreateFromResource (
-				this, Resource.Array.spinner_boats_array, Android.Resource.Layout.SimpleSpinnerItem);
+			var adapterBoats = new CustomArrayAdapter(
+				this, listBoatIds, Resource.Layout.SpinnerItem);
 
-			adapterBoats.SetDropDownViewResource (Android.Resource.Layout.SimpleSpinnerDropDownItem);
+			adapterBoats.SetDropDownViewResource (Resource.Layout.SpinnerItem);
 			spinnerBoats.Adapter = adapterBoats;
 
 
 
 			rokortService = new Rokort_Service ();
-			isTripStarted = await rokortService.hasOngoingTrip ();
+			//isTripStarted = await rokortService.hasOngoingTrip ();
 			updateUi();
 
 			button.Click += async delegate {
@@ -79,30 +91,37 @@ namespace Rokort_Android
 			};
 		}
 
+		public class CustomArrayAdapter : ArrayAdapter
+		{
+			List<KeyValuePair<String, String>> _listItems;
+
+			public CustomArrayAdapter(Context context, List<KeyValuePair<String, String>> listItems, int id) : base(context, id)
+			{
+				_listItems = listItems;
+			}
+
+			public override int Count {
+				get { return _listItems.Count; }
+			}
+
+			public override Java.Lang.Object GetItem (int position) {
+				KeyValuePair<String, String> tblItem = _listItems[position];
+				return tblItem.Key;
+			}
+		}
+
 		private void spinnerRowerNames_ItemSelected (object sender, AdapterView.ItemSelectedEventArgs e)
 		{
-			Spinner spinner = (Spinner)sender;
-
-			String selectedRowerName = spinner.GetItemAtPosition (e.Position).ToString();
-			if (selectedRowerName.Equals(stringArray[0])) {
-				selectedRowerId = "1541";
-			}
-			else {
-			    selectedRowerId = "1542";
-			}
+			KeyValuePair<String, String> tblItem=listRowerNames[e.Position];
+			selectedRowerId = tblItem.Value;
+			Console.WriteLine (selectedRowerId);
 		}
 
 		private void spinnerBoats_ItemSelected (object sender, AdapterView.ItemSelectedEventArgs e)
 		{
-			Spinner spinner = (Spinner)sender;
-			String selectedBoat = spinner.GetItemAtPosition (e.Position).ToString();
-
-			if (selectedBoat.Equals(GetString(Resource.Array.spinner_boats_array[0]))) {
-				selectedBoatId = "090";
-			}
-			else {
-				selectedBoatId = "080";
-			}
+			KeyValuePair<String, String> tblItem=listBoatIds[e.Position];
+			selectedBoatId = tblItem.Value;
+			Console.WriteLine (selectedBoatId);
 		}
 
 		void updateUi ()
