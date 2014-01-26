@@ -57,6 +57,9 @@ namespace Rokort_Android
 			configureSpinner (spinnerBoats, new CustomArrayAdapter (this, listBoatIds, Resource.Layout.SpinnerItem));
 
 			rokortService = new Rokort_Service ();
+
+			// TODO Check for slected user instead
+
 			isTripStarted = await rokortService.hasOngoingTrip ();
 			updateUi();
 
@@ -86,6 +89,8 @@ namespace Rokort_Android
 			KeyValuePair<String, String> tblItem=listRowerNames[e.Position];
 			selectedRowerId = tblItem.Value;
 			Console.WriteLine ("Selected rowerId: " + selectedRowerId);
+
+			// TODO Thi sshould trigger call to rokortService.hasOngoingTrip ();
 		}
 
 		private void spinnerBoats_ItemSelected (object sender, AdapterView.ItemSelectedEventArgs e)
