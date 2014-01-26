@@ -18,7 +18,6 @@ namespace Rokort_Android
 		Rokort_Service rokortService;
 		Button button;
 		EditText editTextDistance;
-		TextView textViewDistanceLabel;
 		LinearLayout startTripWrapperLayout;
 		LinearLayout stopTripWrapperLayout;
 
@@ -28,7 +27,7 @@ namespace Rokort_Android
 		static List<KeyValuePair<String,String>> listRowerNames = new List<KeyValuePair<String,String>> ();
 		static List<KeyValuePair<String,String>> listBoatIds = new List<KeyValuePair<String,String>> ();
 
-		protected override void OnCreate (Bundle bundle)
+		protected override async void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
@@ -58,7 +57,7 @@ namespace Rokort_Android
 			configureSpinner (spinnerBoats, new CustomArrayAdapter (this, listBoatIds, Resource.Layout.SpinnerItem));
 
 			rokortService = new Rokort_Service ();
-			//isTripStarted = await rokortService.hasOngoingTrip ();
+			isTripStarted = await rokortService.hasOngoingTrip ();
 			updateUi();
 
 			button.Click += async delegate {
@@ -86,14 +85,14 @@ namespace Rokort_Android
 		{
 			KeyValuePair<String, String> tblItem=listRowerNames[e.Position];
 			selectedRowerId = tblItem.Value;
-			Console.WriteLine (selectedRowerId);
+			Console.WriteLine ("Selected rowerId: " + selectedRowerId);
 		}
 
 		private void spinnerBoats_ItemSelected (object sender, AdapterView.ItemSelectedEventArgs e)
 		{
 			KeyValuePair<String, String> tblItem=listBoatIds[e.Position];
 			selectedBoatId = tblItem.Value;
-			Console.WriteLine (selectedBoatId);
+			Console.WriteLine ("Selected boatId: " + selectedBoatId);
 		}
 
 		void updateUi ()
