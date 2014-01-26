@@ -28,14 +28,15 @@ namespace Rokort_Android
 		static List<KeyValuePair<String,String>> listRowerNames = new List<KeyValuePair<String,String>> ();
 		static List<KeyValuePair<String,String>> listBoatIds = new List<KeyValuePair<String,String>> ();
 
-		protected override async void OnCreate (Bundle bundle)
+		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
+
 			Window.RequestFeature (WindowFeatures.NoTitle);
 
 			// Initialize data
 			listRowerNames.Add (new KeyValuePair<String, String>("Jakob Roesgaard Færch", "1541"));
-				listRowerNames.Add (new KeyValuePair<String, String>("Trine Roesgaard Færch", "1542"));
+			listRowerNames.Add (new KeyValuePair<String, String>("Trine Roesgaard Færch", "1542"));
 
 			listBoatIds.Add (new KeyValuePair<String, String>("ÅKS Brabrand - Ener", "090"));
 			listBoatIds.Add (new KeyValuePair<String, String>("Gæstebåd", "080"));
@@ -47,30 +48,14 @@ namespace Rokort_Android
 			stopTripWrapperLayout = FindViewById<LinearLayout> (Resource.Id.stop_trip_wrapper);
 			button = FindViewById<Button> (Resource.Id.myButton);
 			editTextDistance = FindViewById<EditText> (Resource.Id.editTextDistance);
-			textViewDistanceLabel = FindViewById<TextView> (Resource.Id.textViewDistanceLabel);
-			textViewDistanceLabel.Text = GetString (Resource.String.distance_unit_hint);
-
 
 			Spinner spinnerRowerNames = FindViewById<Spinner> (Resource.Id.spinnerRowerNames);
-
 			spinnerRowerNames.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs> (spinnerRowerNames_ItemSelected);
-			var adapterRowerNames = new CustomArrayAdapter(
-				this, listRowerNames, Resource.Layout.SpinnerItem);
-
-			adapterRowerNames.SetDropDownViewResource (Resource.Layout.SpinnerItem);
-			spinnerRowerNames.Adapter = adapterRowerNames;
-
+			configureSpinner (spinnerRowerNames, new CustomArrayAdapter (this, listRowerNames, Resource.Layout.SpinnerItem));
 
 			Spinner spinnerBoats = FindViewById<Spinner> (Resource.Id.spinnerBoats);
-
 			spinnerBoats.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs> (spinnerBoats_ItemSelected);
-			var adapterBoats = new CustomArrayAdapter(
-				this, listBoatIds, Resource.Layout.SpinnerItem);
-
-			adapterBoats.SetDropDownViewResource (Resource.Layout.SpinnerItem);
-			spinnerBoats.Adapter = adapterBoats;
-
-
+			configureSpinner (spinnerBoats, new CustomArrayAdapter (this, listBoatIds, Resource.Layout.SpinnerItem));
 
 			rokortService = new Rokort_Service ();
 			//isTripStarted = await rokortService.hasOngoingTrip ();
@@ -91,23 +76,10 @@ namespace Rokort_Android
 			};
 		}
 
-		public class CustomArrayAdapter : ArrayAdapter
+		void configureSpinner (Spinner spinnerRowerNames, ArrayAdapter adapter)
 		{
-			List<KeyValuePair<String, String>> _listItems;
-
-			public CustomArrayAdapter(Context context, List<KeyValuePair<String, String>> listItems, int id) : base(context, id)
-			{
-				_listItems = listItems;
-			}
-
-			public override int Count {
-				get { return _listItems.Count; }
-			}
-
-			public override Java.Lang.Object GetItem (int position) {
-				KeyValuePair<String, String> tblItem = _listItems[position];
-				return tblItem.Key;
-			}
+			adapter.SetDropDownViewResource (Resource.Layout.SpinnerItem);
+			spinnerRowerNames.Adapter = adapter;
 		}
 
 		private void spinnerRowerNames_ItemSelected (object sender, AdapterView.ItemSelectedEventArgs e)
