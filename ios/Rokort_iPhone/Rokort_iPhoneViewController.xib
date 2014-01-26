@@ -8,7 +8,7 @@
             <connections>
                 <outlet property="boatPicker" destination="zZv-rI-04w" id="HDi-Wh-0fP"/>
                 <outlet property="btnClickMe" destination="8" id="12"/>
-                <outlet property="pickerView" destination="FOb-rJ-7Lv" id="rdM-9t-EiS"/>
+                <outlet property="pickerView" destination="gfK-tW-rtk" id="JFw-4O-sh2"/>
                 <outlet property="rowerPicker" destination="FOb-rJ-7Lv" id="E2Q-iZ-3uw"/>
                 <outlet property="view" destination="6" id="7"/>
             </connections>
