@@ -40,7 +40,7 @@ namespace Rokort_iPhone
 				UseCookies = false,
 				UseDefaultCredentials = false,
                 Proxy = new WebProxy ("http://192.168.1.11:8888", false, new string[] {}),
-                UseProxy = true,
+				UseProxy = false,
 			};
 			HttpClient hc = new HttpClient (handler);
 			return hc;
