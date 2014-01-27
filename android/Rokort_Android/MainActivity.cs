@@ -26,6 +26,12 @@ namespace Rokort_Android
 		String selectedRowerId;
 		String selectedBoatId;
 
+		Spinner spinnerRowerNames;
+		Spinner spinnerBoats;
+
+		CustomArrayAdapter customArrayAdapterRowerNames;
+		CustomArrayAdapter customArrayAdapterBoatdIds;
+
 		Color secondaryTextColor = Color.Argb(0x44,0xff,0xff,0xff);
 
 		static List<KeyValuePair<String,String>> listRowerNames = new List<KeyValuePair<String,String>> ();
@@ -38,12 +44,17 @@ namespace Rokort_Android
 			Window.RequestFeature (WindowFeatures.NoTitle);
 
 			// Initialize data
+			listRowerNames.Clear ();
 			listRowerNames.Add (new KeyValuePair<String, String>("Jakob Roesgaard Færch", "1541"));
 			listRowerNames.Add (new KeyValuePair<String, String>("Trine Roesgaard Færch", "1542"));
 
+			listBoatIds.Clear ();
 			listBoatIds.Add (new KeyValuePair<String, String>("ÅKS Brabrand - Ener", "090"));
 			listBoatIds.Add (new KeyValuePair<String, String>("Gæstebåd", "080"));
 			listBoatIds.Add (new KeyValuePair<String, String>("Ergometer", "500"));
+
+			customArrayAdapterRowerNames = new CustomArrayAdapter (this, listRowerNames, Resource.Layout.SpinnerItem);
+			customArrayAdapterBoatdIds = new CustomArrayAdapter (this, listBoatIds, Resource.Layout.SpinnerItem);
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
@@ -61,13 +72,13 @@ namespace Rokort_Android
 				}
 			};
 
-			Spinner spinnerRowerNames = FindViewById<Spinner> (Resource.Id.spinnerRowerNames);
+			spinnerRowerNames = FindViewById<Spinner> (Resource.Id.spinnerRowerNames);
 			spinnerRowerNames.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs> (spinnerRowerNames_ItemSelected);
-			configureSpinner (spinnerRowerNames, new CustomArrayAdapter (this, listRowerNames, Resource.Layout.SpinnerItem));
+			configureSpinner (spinnerRowerNames, customArrayAdapterRowerNames);
 
-			Spinner spinnerBoats = FindViewById<Spinner> (Resource.Id.spinnerBoats);
+			spinnerBoats = FindViewById<Spinner> (Resource.Id.spinnerBoats);
 			spinnerBoats.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs> (spinnerBoats_ItemSelected);
-			configureSpinner (spinnerBoats, new CustomArrayAdapter (this, listBoatIds, Resource.Layout.SpinnerItem));
+			configureSpinner (spinnerBoats, customArrayAdapterBoatdIds);
 
 			rokortService = new Rokort_Service ();
 
