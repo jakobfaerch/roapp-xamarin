@@ -122,7 +122,7 @@ namespace Rokort_iPhone
                     new KeyValuePair<string, string> ("action", action),
 					new KeyValuePair<string, string> ("guest", guest),
 					new KeyValuePair<string, string> ("route", route),
-					new KeyValuePair<string, string> ("Description", Description),
+					new KeyValuePair<string, string> ("Description", (BoatID == 500 ? "Ergometer " : "") + Description),
 					new KeyValuePair<string, string> ("StartDateTime", formatApiDate(StartDateTime)),
 					new KeyValuePair<string, string> ("EndDateTime", formatApiDate(EndDateTime)),
 					new KeyValuePair<string, string> ("Distance", Distance),
