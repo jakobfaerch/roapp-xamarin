@@ -76,7 +76,7 @@ namespace Rokort_iPhone
                 BoatID = null;
 				guest = "";
 				route = "1";
-				Description = "Brabrand Sø";
+				Description = "Brabrand";
 				if (ongoingTrip != null) {
 					StartDateTime = ongoingTrip.startTime;
 				} else {
